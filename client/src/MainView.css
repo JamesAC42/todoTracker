@@ -1,0 +1,119 @@
+div.container {
+  position:absolute;
+  top:0;
+  left:0;
+  margin:0;
+  padding:0;
+  height:100vh;
+  width:100vw;
+  display:flex;
+  z-index:50;
+}
+
+div.section {
+  position:relative;
+  flex-basis:0;
+  flex-grow:1;
+  flex-shrink:1;
+  padding:0;
+  height:100vh;
+}
+
+div.blue   { background: rgb(44, 121, 223) }
+div.navy   { background: rgb(29, 55, 172) }
+div.red    { background: rgb(216, 75, 75) }
+div.green  { background: rgb(73, 180, 82) }
+div.pink   { background: rgb(197, 75, 197) }
+div.purple { background: rgb(126, 88, 216) }
+div.orange { background: rgb(190, 106, 66) }
+
+div.blue-status   { background: rgb(19, 74, 145) }
+div.navy-status   { background: rgb(17, 35, 112) }
+div.red-status    { background: rgb(158, 43, 43) }
+div.green-status  { background: rgb(30, 95, 35) }
+div.pink-status   { background: rgb(141, 61, 141) }
+div.purple-status { background: rgb(60, 33, 122) }
+div.orange-status { background: rgb(121, 60, 32) }
+
+div.section-name {
+  position:absolute;
+  top:0;
+  left:50%;
+  transform:translate(-50%, 5vh);
+  text-align:center;
+  height:3em;
+  line-height:3em;
+  font-size:2em;
+  color:#fff;
+  font-family:"Montserrat", sans-serif;
+}
+
+div.list-container {
+  position:absolute;
+  width:50%;
+  top:50%;
+  left:50%;
+  transform:translate(calc(-50% - 10px), -50%);
+  border-top:1px solid #fff;
+  border-bottom:1px solid #fff;
+  overflow-x:hidden;
+}
+
+div.list-container-inner {
+  height:100%;
+  width:100%;
+  padding-right:30px;
+  max-height:60vh;
+  overflow-y:scroll;
+}
+
+div.list-container-inner ul {
+  list-style-type:none;
+}
+
+div.list-container-inner ul li {
+  text-align:center;
+  font-size:1.5em;
+  line-height:1.7em;
+  color:#eee;
+  font-family: "Karla", sans-serif;
+  cursor:pointer;
+}
+
+div.list-container-inner ul li:hover {
+  text-decoration: line-through;
+  background:rgba(255, 255, 255, 0.425);
+}
+
+div.undo-button {
+  position:absolute;
+  left:0;
+  bottom:0;
+  margin:20px;
+  height:30px;
+  width:30px;
+  padding:0;
+  cursor:pointer;
+  transition:.1s ease-in;
+}
+
+div.undo-button img {
+  width:30px;
+}
+
+@keyframes spin {
+  100% {
+    transform:rotate(-360deg);
+  }
+}
+
+div.undo-button:hover {
+  opacity:0.5;
+  animation: spin .2s;
+}
+
+div.section canvas {
+  height:100%;
+  width:calc(100vw / 3);
+  margin:0;
+}

@@ -1,0 +1,59 @@
+body {
+  overflow:hidden;
+  background:rgb(88, 90, 219);
+}
+
+div.no-lists-message {
+  position:absolute;
+  width:40vw;
+  padding:20px;
+  line-height:2.4em;
+  font-size:2em;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  margin:0;
+  font-family:'Montserrat', sans-serif;
+  color:#fff;
+  text-align:center;
+  z-index:1;
+}
+
+div.usernameLabel {
+  position:absolute;
+  height:30px;
+  font-size:1.5em;
+  font-family: 'Montserrat', sans-serif;
+  text-align:center;
+  color:#fff;
+  line-height:30px;
+  top:0;
+  right:0;
+  margin:10px;
+  padding:5px 15px;  
+  z-index:100;
+}
+
+div.login-btn {
+  position:absolute;
+  height:30px;
+  border-radius:5px;
+  border:1px solid #fff;
+  font-size:1.5em;
+  font-family: 'Montserrat', sans-serif;
+  text-align:center;
+  color:#fff;
+  line-height:30px;
+  top:0;
+  right:0;
+  margin:10px;
+  padding:5px 15px;  
+  z-index:100;
+  cursor:pointer;
+  transition:.1s ease-in-out;
+}
+
+div.login-btn:hover {
+  color: rgb(88, 90, 219);
+  background:#fff;
+}

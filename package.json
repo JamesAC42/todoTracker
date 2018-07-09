@@ -1,0 +1,20 @@
+{
+  "name": "todotracker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "broker.js",
+  "scripts": {
+    "client": "cd client && npm start",
+    "server": "nodemon broker.js",
+    "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
+  },
+  "author": "jamesac",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^3.0.0",
+    "formidable": "^1.2.1",
+    "fs": "0.0.1-security",
+    "socket.io": "^2.1.1",
+    "validator": "^10.4.0"
+  }
+}
