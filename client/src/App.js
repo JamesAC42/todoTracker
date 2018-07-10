@@ -17,7 +17,6 @@ class App extends Component {
     this.setState({loginVisible: visible});
   }
   signIn = (username) => {
-    console.log(username);
     this.setState({
       username,
       signedIn: true,

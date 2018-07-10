@@ -4,44 +4,46 @@ import io from 'socket.io-client';
 
 class Section extends Component {
   check = (index) => {
-    this.props.check(this.props.username, index);
+    if(!this.props.signedIn ) return;
+    this.props.check(this.props.list.username, index);
   }
   undo = () => {
-    this.props.undo(this.props.username);
+    if(!this.props.signedIn) return;
+    this.props.undo(this.props.list.username);
   }
   render(){
 
-    const colors = ["blue", "navy", "red", "green", "pink", "purple", "orange"];
-    let color = colors[Math.floor(Math.random() * colors.length)];
-    let percentage = this.props.items
+    //const colors = ["blue", "navy", "red", "green", "pink", "purple", "orange"];
+
+    let complete = this.props.list.itemsCompleted.length;
+    let pending = this.props.list.itemsPending.length;
+    let height = Math.floor((complete / (complete + pending)) * 100);
 
     return(
-      <div className={"section " + color}>
+      <div className={"section " + this.props.list.color}>
         <div className="section-name">
-          {this.props.username}
+          {this.props.list.username}
         </div>
         <canvas id="canvas-one"></canvas>
         <div className="list-container">
           <div className="list-container-inner">
-            <ul>
-              {this.props.itemsPending.map((item, index) => 
-                <li 
-                  onClick={() => this.check(index)}
-                  key={index}>
-                  {item}
-                </li>
-              )}
-            </ul>
+            {this.props.list.itemsPending.map((item, index) => 
+              <div
+                className="list-item"
+                onClick={() => this.check(index)}
+                key={index}>
+                {item}
+              </div>
+            )}
           </div>
         </div>
         <div className="undo-button" title="Undo" onClick={this.undo}>
           <img src={window.location.origin + "/undo-white.png"} alt="UNDO" />
         </div>
         <div
-          className="fill-line"
+          className={"fill-line " + this.props.list.color + "-status"} 
           style={{
-            "height":0,
-            "background":color + "-status"
+            "height": height + "vh"
           }}>
         </div>
       </div>
@@ -55,31 +57,71 @@ class MainView extends Component {
     this.state = {
       lists: []
     }
-    this.io = io();
+    this.io = io.connect("http://localhost:5001");
   }
-  check = (username, index) => {
-    return;
-    //io.emit();
-  }
-  undo = (username) => {
-    return;
-    //io.emit();
-  }
-  render(){
-    
+  componentDidMount() {
     this.io.on('update', data => {
       this.setState({lists: data.lists});
     });
+  }
+  emit = () => {
+    let lists = {lists: this.state.lists};
+    fetch('/editLists', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8"
+      },
+      body: JSON.stringify(lists)
+    })
+    .then(response => response.json())
+    .then(json => {
+      if(!json.success) console.log(json);
+    })
+    .catch(error => console.error(`Fetch Error =\n`, error));
+  }
+  check = (username, index) => {
+    if(username !== this.props.username) return;
+    let lists = [...this.state.lists];
+    for(let i in lists) {
+      if(lists[i].username === username) {
+        let list = {...lists[i]};
+        lists.splice(i, 1);
+        let item = list.itemsPending[index];
+        list.itemsPending.splice(index, 1);
+        list.itemsCompleted.push(item);
+        lists.splice(i, 0, list);
+      }
+    }
+    this.setState({lists});
+    this.emit();
+  }
+  undo = (username) => {
+    if(username !== this.props.username) return;
+    let lists = [...this.state.lists];
+    for(let i in lists) {
+      if(lists[i].username === username){
+        let list = {...lists[i]};
+        lists.splice(i, 1);
+        let final = list.itemsCompleted.length - 1;
+        let item = list.itemsCompleted[final];
+        list.itemsCompleted.splice(final, 1);
+        list.itemsPending.push(item);
+        lists.splice(i, 0, list);
+      }
+    }
+    this.setState({lists});
+    this.emit();
+  }
 
+  render(){
     if(!this.state.lists.length) return null;
     return(
       <div className="container">
         {this.state.lists.map(user => 
           <Section
             key={user.username}
-            itemsPending={user.itemsPending}
-            itemCompleted={user.itemsCompleted}
-            username={user.username}
+            signedIn={this.props.signedIn}
+            list={user}
             undo={this.undo}
             check={this.check} />
         )}

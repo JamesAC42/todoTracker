@@ -12,8 +12,10 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^3.0.0",
+    "bcryptjs": "^2.4.3",
     "formidable": "^1.2.1",
     "fs": "0.0.1-security",
+    "node-gyp": "^3.7.0",
     "socket.io": "^2.1.1",
     "validator": "^10.4.0"
   }

@@ -19,6 +19,16 @@ div.section {
   height:100vh;
 }
 
+div.fill-line {
+  position:absolute;
+  bottom:0;
+  left:0;
+  margin:0;
+  padding:0;
+  width:100%;
+  z-index:1;
+}
+
 div.blue   { background: rgb(44, 121, 223) }
 div.navy   { background: rgb(29, 55, 172) }
 div.red    { background: rgb(216, 75, 75) }
@@ -43,9 +53,10 @@ div.section-name {
   text-align:center;
   height:3em;
   line-height:3em;
-  font-size:2em;
+  font-size:1.8em;
   color:#fff;
   font-family:"Montserrat", sans-serif;
+  z-index:50;
 }
 
 div.list-container {
@@ -57,6 +68,7 @@ div.list-container {
   border-top:1px solid #fff;
   border-bottom:1px solid #fff;
   overflow-x:hidden;
+  z-index:50;
 }
 
 div.list-container-inner {
@@ -67,20 +79,22 @@ div.list-container-inner {
   overflow-y:scroll;
 }
 
-div.list-container-inner ul {
-  list-style-type:none;
-}
-
-div.list-container-inner ul li {
+div.list-item {
+  position:relative;
+  width:calc(100% + 30px);
+  float: left;
+  margin:0;
+  padding:10px 0;
+  line-height:1.5em;
   text-align:center;
-  font-size:1.5em;
-  line-height:1.7em;
-  color:#eee;
-  font-family: "Karla", sans-serif;
+  font-family:"Karla", sans-serif;
+  font-size:1.1em;
+  color:#fff;
   cursor:pointer;
+  word-wrap: break-word;
 }
 
-div.list-container-inner ul li:hover {
+div.list-item:hover {
   text-decoration: line-through;
   background:rgba(255, 255, 255, 0.425);
 }
@@ -95,6 +109,7 @@ div.undo-button {
   padding:0;
   cursor:pointer;
   transition:.1s ease-in;
+  z-index:50;
 }
 
 div.undo-button img {

@@ -7,11 +7,21 @@ const bcrypt = require('bcrypt');
 const _PORT = 5001;
 const saltRounds = 10;
 
-const lists = require('./lists.json').lists;
+let lists = require('./lists.json').lists;
+
+/*
+  list item form
+  {
+    "username": "",
+    "color": "",
+    "itemsPending": [],
+    "itemsCompleted": []
+  }
+  maybe typescript next time...
+*/
 
 const handler = (req, res) => {
   const url = req.url;
-  console.log(url);
   if(req.method.toLowerCase() === "post") {
     switch(url) {
       case '/createAccount':
@@ -20,13 +30,24 @@ const handler = (req, res) => {
       case '/signIn':
         signIn(req, res);
         break;
+      case '/editLists':
+        editLists(req, res);
+        break;
+      default:
+        res.writeHead(500);
+        res.end();
+    }
+  } else {
+    switch(url) {
+      case '/listToJson':
+        fs.createReadStream('./listToJson.html').pipe(res).once('end', () => {
+          res.end();
+        });
+        break;
       default:
         res.writeHead(404);
         res.end();
     }
-  } else {
-    console.log(`GET request for ${url}`);
-    res.end();
   }
 }
 
@@ -90,7 +111,6 @@ const signIn = (req, res) => {
       flag++;
     }
     if(flag === users.users.length) {
-      console.log('flag');
       res.end(JSON.stringify({
         status: "INVALID",
         message: "Invalid username or password"
@@ -100,20 +120,22 @@ const signIn = (req, res) => {
   })
 }
 
+const editLists = (req, res) => {
+  const form = new formidable.IncomingForm();
+  form.parse(req, (err, fields) => {
+    let l = fields.lists;
+    lists = l;
+    io.emit('update', {lists});
+    res.writeHead(200, {"Content-Type": "application/json"});
+    res.end(JSON.stringify({success:true}));
+  })
+}
+
 const server = createServer(handler);
 const io = require('socket.io')(server);
 
 io.on('connection', socket => {
   io.emit('update', {lists});
-});
-
-io.on('editLists', data => {
-  let write = {data};
-  io.emit('update', write);
-  fs.writeFile('./lists.json', JSON.stringify(write, null, '  '), 'utf8',
-  callback => {
-    return;
-  })
 });
 
 server.listen(_PORT);

@@ -68,7 +68,7 @@ class LoginModal extends Component {
       },
       body: JSON.stringify(s)
     })
-    .then(response => response.json()) // parses response to JSON
+    .then(response => response.json())
     .then(json => {
       if(json.status === "INVALID"){
         this.setState({errorSignIn: json.message});
