@@ -21,6 +21,7 @@ div.no-lists-message {
 
 div.usernameLabel {
   position:absolute;
+  border-radius:5px;
   height:30px;
   font-size:1.5em;
   font-family: 'Montserrat', sans-serif;
@@ -49,11 +50,11 @@ div.login-btn {
   margin:10px;
   padding:5px 15px;  
   z-index:100;
-  cursor:pointer;
   transition:.1s ease-in-out;
 }
 
-div.login-btn:hover {
+div.login-btn:hover, div.usernameLabel:hover {
   color: rgb(88, 90, 219);
   background:#fff;
+  cursor:pointer;
 }

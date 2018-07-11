@@ -90,18 +90,20 @@ div.list-item {
   font-family:"Karla", sans-serif;
   font-size:1.1em;
   color:#fff;
-  cursor:pointer;
   word-wrap: break-word;
 }
 
-div.list-item:hover {
+div.list-item-hover {
+  cursor:pointer;
+}
+
+div.list-item-hover:hover {
   text-decoration: line-through;
   background:rgba(255, 255, 255, 0.425);
 }
 
-div.undo-button {
+div.undo-button, div.show-edit-list {
   position:absolute;
-  left:0;
   bottom:0;
   margin:20px;
   height:30px;
@@ -112,7 +114,15 @@ div.undo-button {
   z-index:50;
 }
 
-div.undo-button img {
+div.undo-button {
+  left:0;
+}
+
+div.show-edit-list {
+  right:0;
+}
+
+div.undo-button img, div.show-edit-list img {
   width:30px;
 }
 
@@ -125,6 +135,11 @@ div.undo-button img {
 div.undo-button:hover {
   opacity:0.5;
   animation: spin .2s;
+}
+
+div.show-edit-list:hover {
+  opacity:0.5;
+  animation: bounce .2s;
 }
 
 div.section canvas {

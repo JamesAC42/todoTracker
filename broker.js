@@ -33,6 +33,9 @@ const handler = (req, res) => {
       case '/editLists':
         editLists(req, res);
         break;
+      case '/editListUser':
+        editListUser(req, res);
+        break;
       default:
         res.writeHead(500);
         res.end();
@@ -125,6 +128,23 @@ const editLists = (req, res) => {
   form.parse(req, (err, fields) => {
     let l = fields.lists;
     lists = l;
+    io.emit('update', {lists});
+    res.writeHead(200, {"Content-Type": "application/json"});
+    res.end(JSON.stringify({success:true}));
+  })
+}
+
+const editListUser = (req, res) => {
+  const form = new formidable.IncomingForm();
+  form.parse(req, (err, fields) => {
+    let item = fields.item;
+    let newLists = [...lists];
+    for(let i in newLists){
+      if(newLists[i].username === item.username){
+        newLists.splice(i, 1, item);
+      }
+    }
+    lists = newLists;
     io.emit('update', {lists});
     res.writeHead(200, {"Content-Type": "application/json"});
     res.end(JSON.stringify({success:true}));

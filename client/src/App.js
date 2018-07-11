@@ -9,7 +9,8 @@ class App extends Component {
     this.state = {
       loginVisible: false,
       signedIn: false,
-      username: null
+      username: null,
+      signoutVisible: false
     }
   }
   toggleModal = () => {
@@ -23,6 +24,17 @@ class App extends Component {
       loginVisible: false
     });
   }
+  signOut = () => {
+    this.setState({
+      username:null,
+      signedIn: false,
+      signoutVisible: false
+    })
+  }
+  toggleSignOut = () => {
+    let signoutVisible = !this.state.signoutVisible;
+    this.setState({signoutVisible});
+  }
   render() {
     return (
       <div>
@@ -35,8 +47,11 @@ class App extends Component {
         }
         { this.state.signedIn &&
           <div
-            className="usernameLabel">
-            {this.state.username}
+            className="usernameLabel"
+            onMouseEnter={this.toggleSignOut}
+            onMouseLeave={this.toggleSignOut}
+            onClick={this.signOut}>
+            {this.state.signoutVisible ? "Sign Out" : this.state.username}
           </div>
         }
         <LoginModal 

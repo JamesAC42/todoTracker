@@ -1,8 +1,15 @@
 import React, { Component } from 'react';
 import './MainView.css';
+import EditList from './EditList.js';
 import io from 'socket.io-client';
 
 class Section extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      editListVisible: false
+    }
+  }
   check = (index) => {
     if(!this.props.signedIn ) return;
     this.props.check(this.props.list.username, index);
@@ -11,6 +18,10 @@ class Section extends Component {
     if(!this.props.signedIn) return;
     this.props.undo(this.props.list.username);
   }
+  toggleEditList = () => {
+    let editListVisible = !this.state.editListVisible;
+    this.setState({editListVisible});
+  }
   render(){
 
     //const colors = ["blue", "navy", "red", "green", "pink", "purple", "orange"];
@@ -18,6 +29,13 @@ class Section extends Component {
     let complete = this.props.list.itemsCompleted.length;
     let pending = this.props.list.itemsPending.length;
     let height = Math.floor((complete / (complete + pending)) * 100);
+
+    let controlsActive = 
+      this.props.signedIn 
+      && this.props.currentUser === this.props.list.username
+
+    let itemClass = "list-item";
+    if(controlsActive) itemClass += " list-item-hover";
 
     return(
       <div className={"section " + this.props.list.color}>
@@ -29,7 +47,7 @@ class Section extends Component {
           <div className="list-container-inner">
             {this.props.list.itemsPending.map((item, index) => 
               <div
-                className="list-item"
+                className={itemClass}
                 onClick={() => this.check(index)}
                 key={index}>
                 {item}
@@ -37,15 +55,28 @@ class Section extends Component {
             )}
           </div>
         </div>
-        <div className="undo-button" title="Undo" onClick={this.undo}>
-          <img src={window.location.origin + "/undo-white.png"} alt="UNDO" />
-        </div>
+        {
+          controlsActive &&
+          <div className="undo-button" title="Undo" onClick={this.undo}>
+            <img src={window.location.origin + "/undo-white.png"} alt="UNDO" />
+          </div>
+        }
+        {
+          controlsActive &&
+          <div className="show-edit-list" title="Edit List" onClick={this.toggleEditList}>
+            <img src={window.location.origin + "/edit.png"} alt="EDIT" />
+          </div>
+        }
         <div
           className={"fill-line " + this.props.list.color + "-status"} 
           style={{
             "height": height + "vh"
           }}>
         </div>
+        <EditList
+          visible={this.state.editListVisible}
+          list={this.props.list}
+          close={this.toggleEditList}/>
       </div>
     )
   }
@@ -57,7 +88,7 @@ class MainView extends Component {
     this.state = {
       lists: []
     }
-    this.io = io.connect("http://localhost:5001");
+    this.io = io.connect();
   }
   componentDidMount() {
     this.io.on('update', data => {
@@ -121,9 +152,10 @@ class MainView extends Component {
           <Section
             key={user.username}
             signedIn={this.props.signedIn}
+            currentUser={this.props.username}
             list={user}
             undo={this.undo}
-            check={this.check} />
+            check={this.check}/>
         )}
       </div>
     )
